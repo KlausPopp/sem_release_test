@@ -1,3 +1,3 @@
 # sem_release_test
 
-a change
+a change is more than words

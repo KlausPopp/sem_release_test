@@ -20,7 +20,7 @@ jobs:
           fetch-depth: 0
       - name: Release
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.SEMVER_SECRET }}
         run: |
           npm install @semantic-release/changelog @semantic-release/git -D
           npx semantic-release

@@ -37,7 +37,7 @@ jobs:
               sha=`echo ${{ github.event.pull_request.head.sha }} | cut -c1-8`
               echo "::set-output name=version::${{ github.event.pull_request.head.ref }}-${sha}"
           elif [ "$EVENT_NAME" = "release" ]; then
-              echo "::set-output name=version::${{ steps.gitversion.outputs.majorMinorPatch }}"
+              echo "::set-output name=version::${{ steps.gitversion.outputs.semVer }}"
           else
               echo "invalid event type ${EVENT_NAME}"
               exit 1

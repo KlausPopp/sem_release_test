@@ -1,6 +1,11 @@
 name: "Build Image"
 
 on:
+  pull_request:
+    branches:
+      - main
+      - beta
+
   release:
     types: [published]
 
@@ -9,7 +14,7 @@ jobs:
     name: Calculate Version
     runs-on: ubuntu-22.04
     outputs:
-      version: ${{ steps.gitversion.outputs.majorMinorPatch }}-${{ steps.gitversion.outputs.commitsSinceVersionSource }}.${{ github.event.pull_request.head.ref }}.${{ steps.shortSha.outputs.shortSha }}
+      version: ${{ steps.version.outputs.version }}
       name_suffix: ${{ steps.eventCheck.outputs.nameSuffix }}
     steps:
       - uses: actions/checkout@v2
@@ -23,17 +28,19 @@ jobs:
         id: gitversion
         uses: gittools/actions/gitversion/execute@v0.9.7
       - name: Get git sha as on PR gitversion provides incorrect sha
-        id: shortSha
+        id: version
         env:
           EVENT_NAME: ${{ github.event_name }}
         run: |
           echo "Github event is a $EVENT_NAME"
           if [ "$EVENT_NAME" = "pull_request" ]; then
-              echo "::set-output name=shortSha::`echo ${{ github.event.pull_request.head.sha }} | cut -c1-8`"
-          elif [ "$EVENT_NAME" = "push" ]; then
-              echo "::set-output name=shortSha::${GITHUB_SHA::8}"
+              sha=`echo ${{ github.event.pull_request.head.sha }} | cut -c1-8`
+              echo "::set-output name=version::${{ github.event.pull_request.head.ref }}-${sha}"
+          elif [ "$EVENT_NAME" = "release" ]; then
+              echo "::set-output name=version::${{ steps.gitversion.outputs.majorMinorPatch }}"
           else
-              echo "::set-output name=shortSha::invalid"
+              echo "invalid event type ${EVENT_NAME}"
+              exit 1
           fi
       - name: Generate Image name dependend on github event
         id: eventCheck
@@ -42,10 +49,8 @@ jobs:
         run: |
           if [ "$EVENT_NAME" = "pull_request" ]; then
               echo "::set-output name=nameSuffix::-pr"
-          elif [ "$EVENT_NAME" = "push" ]; then
+          elif [ "$EVENT_NAME" = "release" ]; then
               echo "::set-output name=nameSuffix::"
-          else
-              echo "::set-output name=nameSuffix::-invalid"
           fi
 
   dumpversions:

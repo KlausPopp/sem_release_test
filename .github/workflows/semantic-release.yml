@@ -20,7 +20,7 @@ jobs:
           fetch-depth: 0
       - name: Release
         env:
+          # Must be a PAT, not GITHUB_TOKEN. Otherwise other workflows are not triggered!
           GITHUB_TOKEN: ${{ secrets.SEMVER_SECRET }}
         run: |
-          npm install @semantic-release/changelog @semantic-release/git -D
           npx semantic-release

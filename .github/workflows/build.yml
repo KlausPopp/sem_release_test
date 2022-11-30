@@ -57,4 +57,9 @@ jobs:
     name: "Dump"
     runs-on: ubuntu-latest
     needs: calculate-version
-  
+
+    steps:
+      - name: "Dump"
+        run: |
+          echo "image name is ${{ needs.calculate-version.outputs.version }}"
+          echo "name suffix is ${{ needs.calculate-version.outputs.name_suffix }}"

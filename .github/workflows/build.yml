@@ -6,8 +6,7 @@ on:
       - beta
       - main
   release:
-    types:
-      - "published"
+    types: [published]
 
 jobs:
   calculate-version:

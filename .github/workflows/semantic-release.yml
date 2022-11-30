@@ -1,12 +1,10 @@
 name: Release
 on:
-  workflow_run:
-    workflows: ["Lint Commit Messages"]
+  pull_request:
+  push:
     branches:
       - main
       - beta
-    types:
-      - completed
 
 jobs:
   on-success:

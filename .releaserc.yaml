@@ -10,9 +10,9 @@ plugins:
   - "@semantic-release/github"
 
 prepare:
-  - path: "@semantic-release/git"
-    assets: "docs/CHANGELOG.md"
   - path: "@semantic-release/changelog"
     changelogFile: "docs/CHANGELOG.md"
+  - path: "@semantic-release/git"
+    assets: "docs/CHANGELOG.md"
 publish:
   - path: "@semantic-release/github"

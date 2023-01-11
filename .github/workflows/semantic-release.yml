@@ -20,4 +20,4 @@ jobs:
           # Must be a PAT, not GITHUB_TOKEN. Otherwise other workflows are not triggered!
           GITHUB_TOKEN: ${{ secrets.SEMVER_SECRET }}
         run: |
-          nvm install 'lts/*' && npx semantic-release
+          npx -p node@lts -c "npx semantic-release"
